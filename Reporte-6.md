@@ -417,7 +417,87 @@ El camino `DR` produce:
 
 que tiene exactamente un cero final. La recurrencia alcanza su caso base y reproduce correctamente el óptimo.
 
-### 3.5. Caso especial: celdas con valor 0
+### 3.5. Verificación sobre el ejemplo de la sección 1.2
+
+La pauta solicita comprobar que la recurrencia reproduce también el óptimo presentado al comienzo del informe. Retomamos entonces la matriz de la sección 1.2:
+
+```text
+1    10    10
+1     1    10
+10    1     1
+```
+
+Para esta instancia, cada celda con valor `10` aporta exactamente un factor 2 y un factor 5, mientras que cada celda con valor `1` aporta cero. Por ello, las matrices de costos para \(p=2\) y \(p=5\) son iguales:
+
+```text
+0    1    1
+0    0    1
+1    0    0
+```
+
+Aplicando la recurrencia desde la esquina inferior derecha se obtiene, tanto para \(D_2\) como para \(D_5\), la siguiente tabla de valores óptimos:
+
+```text
+0    1    2
+0    0    1
+1    0    0
+```
+
+Por ejemplo:
+
+\[
+D_p(2,2)=0
+\]
+
+\[
+D_p(2,1)=0+D_p(2,2)=0
+\]
+
+\[
+D_p(1,1)=0+\min(D_p(2,1),D_p(1,2))
+          =0+\min(0,1)=0
+\]
+
+\[
+D_p(1,0)=0+\min(D_p(2,0),D_p(1,1))
+          =0+\min(1,0)=0
+\]
+
+y finalmente:
+
+\[
+D_p(0,0)=0+\min(D_p(1,0),D_p(0,1))
+          =0+\min(0,1)=0
+\]
+
+Por lo tanto:
+
+\[
+D_2(0,0)=D_5(0,0)=0
+\]
+
+y la recurrencia reproduce exactamente el óptimo de la sección 1.2:
+
+\[
+\boxed{Respuesta=0}
+\]
+
+Además, siguiendo las decisiones que alcanzan esos mínimos:
+
+- desde \((0,0)\) conviene **bajar**;
+- desde \((1,0)\) conviene ir a la **derecha**;
+- desde \((1,1)\) conviene **bajar**;
+- desde \((2,1)\) solo queda ir a la **derecha**.
+
+Así se recupera el camino:
+
+```text
+DRDR
+```
+
+que es exactamente la solución óptima mostrada al comienzo del informe. Con esto, la verificación de la recurrencia queda conectada explícitamente con el ejemplo inicial exigido por la pauta.
+
+### 3.6. Caso especial: celdas con valor 0
 
 Las celdas con valor cero se consideran prohibitivamente costosas dentro de las DP de factores 2 y 5, de modo que \(D_2\) y \(D_5\) calculen el mejor camino **sin atravesar ceros**.
 
@@ -998,11 +1078,18 @@ Por tanto, la evidencia experimental es consistente con:
 
 ### 7.5. Código y reproducibilidad
 
-El repositorio público contiene el reporte, el notebook con la implementación y los experimentos, y el gráfico:
+La entrega reproducible está compuesta por los siguientes archivos:
 
-[**Código y experimentos en GitHub**](https://github.com/Klonoh/Problema-6--The-Least-Round-Way)
+- `Reporte-6.md`: contiene el análisis, la recurrencia, la demostración de correctitud y los resultados experimentales.
+- `problema-6-codigo.ipynb`: contiene la implementación Top-Down, los cuatro casos de prueba, la semilla `20261005`, tres repeticiones por tamaño y el benchmark para
+  `n = [50, 100, 150, 200, 300, 400, 500, 600, 800, 1000]`.
+- `tiempo.png`: contiene el gráfico generado a partir de esas mismas mediciones.
 
-Para mantener la versión entregada completamente reproducible, el notebook debe contener la misma lista de tamaños utilizada en esta sección, incluyendo \(n=1000\), y el archivo del gráfico debe conservar el nombre `tiempo.png`.
+Los tres archivos se encuentran juntos en el repositorio público:
+
+[**Código, experimentos y gráfico en GitHub**](https://github.com/Klonoh/Problema-6--The-Least-Round-Way)
+
+De este modo, los casos de prueba, las mediciones hasta \(n=1000\) y el gráfico mostrado en la sección 7.3 pueden reproducirse directamente ejecutando el notebook enlazado.
 
 ---
 
